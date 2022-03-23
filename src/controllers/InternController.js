@@ -11,8 +11,10 @@ const InterModel= require("../models/InternModel")
         let name = req.body.name
         let mobile = req.body.mobile
         let email = req.body.email
+
+   
         if(!name){
-            return res.status(400).send({status:false, msg:"please provide a name"})
+            return res.status(400).send({status:false, msg:"please provide name or data"})
         }
         if(!mobile){
             return res.status(400).send({status:false, msg:"please provide a mobile number"})
@@ -23,10 +25,34 @@ const InterModel= require("../models/InternModel")
         if(!ClgData){
             return res.status(400).send({status:false, msg:"please provide a ClgData"})
         }
+
+
         const findCollege = await CollegeModel.findById(ClgData)
         if(!findCollege){
             return res.status(400).send({status:false, msg:"please provide a collegeId"})
         }
+
+        
+
+        const changeEmail = await InternModel.findOne({email:email})
+        if(changeEmail){
+          return res.status(400).send({status:false,msg:"please enter another email"})
+        }
+
+        const ChangeNumber = await InternModel.findOne({mobile:mobile})
+        if(ChangeNumber){
+          return res.status(400).send({status:false,msg:"please enter another mobile number"})
+        }
+
+        if(!findCollege){
+            return res.status(400).send({status:false, msg:"please provide a collegeId"})
+        }
+
+   
+        // if(!(/^([+]\d{2})?\d{10}$/.test(mobile))){
+        //   return res.status(400).send({status:false, msg:"please provide a valid number"})
+        // }
+
         if(data){
             const CollegeCreate = await InterModel.create(data)
             return res.status(201).send({status:true, data:CollegeCreate})
@@ -45,7 +71,7 @@ const InterModel= require("../models/InternModel")
 
   const getcollegedetail = async function (req, res) {
     try {
-      let result = {}
+      // let result = {}
       let interns = []
       let name = req.query.name
   

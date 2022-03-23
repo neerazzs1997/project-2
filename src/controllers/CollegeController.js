@@ -8,7 +8,7 @@ const createcollege = async function (req, res) {
     if (!name) {
       return res
         .status(400)
-        .send({ status: false, msg: "please provide name " });
+        .send({ status: false, msg: "please provide name or data " });
     }
     if (!fullName) {
       return res
@@ -21,10 +21,19 @@ const createcollege = async function (req, res) {
         .send({ status: false, msg: "please provide logoLink " });
     }
 
+    let checkNameCollege = await CollegeModel.findOne({ name: name })
+    if (checkNameCollege) { return res.status(400).send({ msg: "Name Already exist" }) }
+
+
     if (Object.keys(data).length !== 0) {
+      
       let savedData = await CollegeModel.create(data);
       return res.status(201).send({ msg: savedData });
-    } else return res.status(400).send({ msg: "BAD REQUEST" });
+
+    } else{
+      return res.status(400).send({status:false, msg: "BAD REQUEST" });
+    }
+
   } catch (err) {
     console.log("This is the error :", err.message);
     return res.status(500).send({ msg: "Error", error: err.message });

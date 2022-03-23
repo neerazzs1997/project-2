@@ -10,18 +10,15 @@ const internschema = new mongoose.Schema( {
     email:{
        type:String,
        required:true,
-       unique:true,
-       validate(value) {
-        if (!validator.isEmail(value)) {
-            throw new Error("Email is invalid");
-
-        }
-    }
+       unique:true
 },
     mobile: {
         type: Number,
         unique: true,
         required: true,
+        // match: [/^([+]\d{2})?\d{10}$/, "please fill a valid mobile Number"],
+        minlength:10,
+        maxlength:10
 
     },
 
